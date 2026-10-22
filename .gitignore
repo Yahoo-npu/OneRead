@@ -1,0 +1,47 @@
+# Swift / Xcode build products
+.build/
+.swiftpm/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+
+# Local applications and release archives (upload ZIPs to GitHub Releases)
+dist/
+*.app/
+*.dSYM/
+
+# Local design explorations and private development notes
+/design/
+/.local/
+/.agents/
+/.codex/
+
+# Credentials, signing material and machine configuration
+.env
+.env.*
+!.env.example
+*.p12
+*.pfx
+*.keychain
+*.keychain-db
+*.mobileprovision
+*.pem
+*.key
+
+# Local reader data: never commit your book library or credentials
+/OneRead/
+/Data/
+/Assets/
+/FolderCovers/
+**/library.json
+**/library-*.json
+**/*-catalog.json
+
+# System and temporary files
+.DS_Store
+.AppleDouble
+._*
+*.log
+*.tmp
+__pycache__/
+*.py[cod]

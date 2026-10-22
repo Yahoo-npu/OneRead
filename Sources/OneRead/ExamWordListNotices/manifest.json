@@ -1,0 +1,21 @@
+{
+  "version": "2026-10-21.2",
+  "repositories": {
+    "KyleBing/english-vocabulary": "c4c6c80879ff17d7025c28fb853a4991c8e6be6a",
+    "skywind3000/ECDICT": "bc015ed2e24a7abef49fc6dbbb7fe32c1dadaf8b"
+  },
+  "sha256": {
+    "kyle-3 四级-乱序.txt": "b6ef93b392837bfad92467ed6a8b3f22da6caf07fcfe8858c4f9eccb72069835",
+    "kyle-4 六级-乱序.txt": "4a938c26f5732194330c5453a7fe28d65cf3fd7009fcdfb5bea4517b8ce48ddb",
+    "kyle-5 考研-乱序.txt": "8a88f5cc466ec18f86f389460e986530444083f5801a131693a057b6b6a5ab17",
+    "ecdict.csv": "1a6947e04785db63613a92e14903cdae7954f7e84860b10e68e5c7cbb3f9c3cf",
+    "kyle-6 托福-乱序.txt": "f7028faff8298e1f75421800b8370014f58fa1a76f0724aa5590b220b36bb516"
+  },
+  "counts": {
+    "CET-4": 4543,
+    "CET-6": 3991,
+    "考研": 5044,
+    "IELTS": 5040,
+    "TOEFL": 10366
+  }
+}

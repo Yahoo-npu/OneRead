@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="250" viewBox="0 0 1080 250" role="img" aria-labelledby="title desc">
+<title id="title">One Read 阅读旅程</title><desc id="desc">功能示意：导入 PDF 和 EPUB，双语对照阅读，收藏生词并同步墨墨。</desc>
+<rect width="1080" height="250" rx="24" fill="#f7f9f7"/>
+<g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">
+<text x="40" y="38" fill="#648370" font-size="11" letter-spacing="3">ONE READ · A LITTLE EVERY DAY</text>
+<g fill="#fff" stroke="#e4eae5"><rect x="40" y="62" width="296" height="148" rx="14"/><rect x="392" y="62" width="296" height="148" rx="14"/><rect x="744" y="62" width="296" height="148" rx="14"/></g>
+<g fill="none" stroke="#456f56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+<path d="M65 101V81h24l7 7v25H65v-12m24-20v8h7m-24 8h16m-16 7h12"/>
+<path d="M417 85h28v28h-28zm14 0v28m-8-21h3m-3 7h3m11-7h3m-3 7h3"/>
+<path d="M769 85h26v28l-13-7-13 7zm8 9h10m-5-5v10"/>
+<path d="M352 135h24m-6-6 6 6-6 6M704 135h24m-6-6 6 6-6 6" stroke="#a3b4a7"/>
+</g>
+<g fill="#29372f" font-size="21" font-weight="600"><text x="64" y="147">导入一本好书</text><text x="416" y="147">读懂每一句话</text><text x="768" y="147">留住每一次积累</text></g>
+<g fill="#718078" font-size="13"><text x="64" y="178">PDF / EPUB · 四大外刊</text><text x="416" y="178">双语对照 · 划词释义 · 句子解析</text><text x="768" y="178">生词收藏 · 考试标签 · 墨墨同步</text></g>
+</g></svg>

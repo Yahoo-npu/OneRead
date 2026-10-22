@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src oneread-asset: data:; style-src 'unsafe-inline'; script-src 'self' 'unsafe-inline'">
+<style>
+:root{--bg:#faf8f2;--text:#302f2b;--muted:#928c80;--line:#e5e1d7;--active:#dae6dc;--size:19px;--column:50%}
+*{box-sizing:border-box}html,body{height:100%;overflow:hidden}body{margin:0;background:var(--bg);color:var(--text);font-family:'Iowan Old Style',Palatino,Georgia,'Songti SC',serif}
+body.light{--bg:#fff;--text:#262626;--muted:#999;--line:#e6e6e6;--active:#e9eeea}body.dark{--bg:#1e1f20;--text:#dededb;--muted:#8e9293;--line:#373a3a;--active:#34483a}
+.columns{display:flex;height:100%;position:relative}.pane{width:var(--column);overflow:auto;overscroll-behavior:contain;position:relative;scrollbar-width:thin;scrollbar-color:#aaa5 transparent;overflow-anchor:none;scroll-behavior:auto}.pane:last-of-type{width:calc(100% - var(--column))}.flow{padding:40px clamp(25px,4vw,64px) 100px;margin:auto;max-width:960px;min-height:100%}.pane:first-of-type{border-right:1px solid var(--line)}
+.block{font-size:var(--size);line-height:1.85;margin:0 0 1.15em;overflow-wrap:anywhere}.heading{font-size:calc(var(--size)*1.55);line-height:1.28;font-weight:600;margin:1.1em 0 .8em;letter-spacing:-.025em}.heading:first-child{margin-top:0}.heading.level-2{font-size:calc(var(--size)*1.25)}.heading.level-3,.heading.level-4,.heading.level-5,.heading.level-6{font-size:calc(var(--size)*1.1)}
+.listItem{padding-left:1em;position:relative}.listItem:before{content:'•';position:absolute;left:0;color:var(--muted)}.quote{padding-left:20px;border-left:3px solid var(--line);font-style:italic}.caption{font-size:calc(var(--size)*.8);color:var(--muted);text-align:center}.translated .block{font-family:'Songti SC','Iowan Old Style',serif;line-height:1.95}.translated .heading{line-height:1.4}
+[data-sentence]{border-radius:3px;transition:background .12s}[data-sentence].active{background:var(--active)}.pending{color:var(--muted);font-size:calc(var(--size)*.85)}.rule{border:0;border-top:1px solid var(--line);margin:30px 0}
+.figure{margin:26px 0 30px}.figure img{display:block;max-width:100%;width:100%;height:auto;margin:0 auto;cursor:zoom-in;border-radius:2px}.missing-image{padding:30px;text-align:center;border:1px dashed var(--line);font:13px -apple-system;color:var(--muted)}
+.pdf-page{position:relative;margin:0 0 28px;background:#fff;box-shadow:0 1px 5px #0002;line-height:1}.pdf-page>img{width:100%;height:auto;display:block;user-select:none}.pdf-text{position:absolute;color:transparent;white-space:pre;overflow:hidden;line-height:1;cursor:text;transform-origin:left top}.pdf-text.active{background:#97c6a855}.page-label{font:11px -apple-system;color:var(--muted);padding:0 0 20px}.page-translations p{margin:0 0 1em}
+.divider{position:absolute;left:var(--column);top:0;bottom:0;width:9px;margin-left:-4px;cursor:col-resize;z-index:3;touch-action:none}.divider:hover{background:#7e938922}.swap{position:absolute;left:var(--column);top:14px;margin-left:-15px;width:30px;height:28px;border:1px solid var(--line);border-radius:7px;background:var(--bg);color:var(--muted);z-index:4;font:16px -apple-system;cursor:pointer}
+body.original .translated,body.translation .source,body.original .divider,body.translation .divider,body.original .swap,body.translation .swap{display:none}body.original .source,body.translation .translated{width:100%;border:0}body.original .flow,body.translation .flow{max-width:840px;padding-left:55px;padding-right:55px}
+body.swapped .source{order:2;border:0}body.swapped .translated{order:1;border-right:1px solid var(--line)}body.swapped.bilingual .translated{width:var(--column)}body.swapped.bilingual .source{width:calc(100% - var(--column))}
+::selection{background:#b7d4ba;color:#16311d}.pdf-text::selection{color:transparent;background:#8dbb9c88}
+dialog{padding:0;border:1px solid #8884;border-radius:10px;background:var(--bg);max-width:94vw;max-height:94vh;overflow:auto;box-shadow:0 10px 60px #0006}dialog::backdrop{background:#0009}dialog img{display:block;max-width:90vw;height:auto}dialog button{position:sticky;top:10px;float:right;margin:10px;width:30px;height:30px;border:0;border-radius:50%;background:#111a;color:white;font-size:18px;cursor:pointer}
+
+#selection-popup{position:fixed;z-index:100;width:min(350px,calc(100vw - 24px));max-height:calc(100vh - 24px);overflow:auto;padding:16px;border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 35px #0003;background:var(--bg);color:var(--text);font:14px/1.55 -apple-system;overscroll-behavior:contain;overflow-anchor:none}
+#selection-popup[hidden]{display:none}.selection-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;font-size:11px;color:var(--muted)}#selection-source{font-family:'Iowan Old Style',Georgia,serif;font-size:22px;font-weight:650;max-height:90px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere}#selection-result{margin-top:12px;max-height:210px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere}#selection-result.error{color:#b64b43}.selection-actions{display:flex;gap:10px;margin-top:16px}#selection-popup button{cursor:pointer;border:1px solid var(--line);border-radius:6px;background:transparent;color:var(--text);font:12px -apple-system;padding:6px 9px}#selection-popup button:disabled{opacity:.5;cursor:default}#selection-popup #selection-collect{background:#456b52;color:#fff;border-color:#456b52}#selection-popup #selection-close{border:0;font-size:16px;padding:0 4px}#selection-notice{font-size:11px;color:var(--muted);margin-top:8px}
+#phonetics{font-size:12px;color:var(--muted);margin-top:8px}#dictionary-details{font-size:14px}.dictionary-pos{font-weight:650;margin-top:12px;color:var(--dict-green)}.dictionary-context{margin-top:12px;padding:9px 11px;border-left:2px solid var(--dict-green);background:var(--dict-tint);color:var(--text);font-size:13px}.dictionary-example{margin-top:14px;font-style:italic}.dictionary-credit{font-size:10px;color:var(--muted);margin-top:14px}#pronunciation{display:flex;align-items:center;gap:8px;margin-top:8px}#pronunciation[hidden]{display:none}#pronunciation #phonetics{margin-top:0}#selection-popup #speech-play{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;padding:4px;border:0;background:transparent;color:var(--dict-green);border-radius:6px}#selection-popup #speech-play:hover{background:var(--dict-tint)}#selection-popup #speech-play:focus-visible{outline:2px solid var(--dict-green);outline-offset:2px}
+#selection-popup{--dict-green:#456b52;--dict-red:#a65358;--dict-tint:#456b520c}body.dark #selection-popup{--dict-green:#a5c6ac;--dict-red:#df9699;--dict-tint:#a5c6ac0e}.selection-heading{display:flex;align-items:baseline;gap:8px 12px;flex-wrap:wrap}#selection-context-meaning{font-size:20px;font-weight:650;line-height:1.4;color:var(--dict-green);overflow-wrap:anywhere}.dictionary-lemma{margin-top:12px;font-size:13px;color:var(--dict-red)}.dictionary-example{color:var(--dict-red)}#pronunciation .selection-actions{margin-top:8px}#selection-popup [data-accent]{color:var(--dict-green);border-color:var(--dict-green)}
+#selection-popup.sentence-mode{width:min(560px,calc(100vw - 32px));padding:22px 24px;border-radius:16px;font-size:14px;line-height:1.7;box-shadow:0 14px 48px #0002}.sentence-mode .selection-header{font-size:12px;font-weight:600;letter-spacing:.03em;margin-bottom:14px;color:var(--dict-green)}.sentence-mode .selection-heading{padding:14px 16px;border-radius:10px;background:var(--dict-tint)}.sentence-mode #selection-source{font-family:'Iowan Old Style',Georgia,serif;font-size:16px;font-weight:400;line-height:1.75;max-height:160px}.analysis-section{margin-top:20px;padding-top:16px;border-top:1px solid var(--line)}.analysis-heading{font-size:13px;font-weight:650;letter-spacing:.04em;color:var(--dict-green);margin-bottom:10px;display:flex;align-items:center;gap:8px}.analysis-heading:before{content:'';width:3px;height:13px;border-radius:2px;background:var(--dict-green)}.analysis-translation{font-size:14px;font-weight:500;line-height:1.8}.analysis-backbone{padding:12px 14px;border-radius:8px;background:var(--dict-tint);font-size:14px;line-height:1.8;white-space:pre-wrap}.analysis-item{margin-top:12px;padding:12px 14px;border:1px solid var(--line);border-radius:9px}.analysis-label{font-size:12px;font-weight:600;color:var(--dict-green);margin-bottom:6px}.analysis-fragment{font:16px/1.7 'Iowan Old Style',Georgia,serif;color:var(--dict-red);margin:0 0 6px;white-space:pre-wrap}.analysis-explanation{font-size:14px;line-height:1.8;white-space:pre-wrap}.sentence-mode .selection-actions{padding-top:14px;border-top:1px solid var(--line);margin-top:20px}.sentence-mode .dictionary-credit{font-size:11px;margin-top:18px}.sentence-mode #selection-result{font-size:14px}#sentence-analysis{overflow-wrap:anywhere}
+</style>
+</head>
+<body><main class="columns"><section tabindex="0" class="pane source" aria-label="英文原文"><article class="flow" id="left"></article></section><section tabindex="0" class="pane translated" aria-label="中文译文"><article class="flow" id="right"></article></section><div class="divider" role="separator" aria-label="调整原文和译文宽度" tabindex="0"></div><button class="swap" title="交换原文和译文" aria-label="交换原文和译文">⇆</button></main><aside id="selection-popup" role="dialog" aria-label="划词翻译悬浮窗" hidden><div class="selection-header"><span id="selection-title">划词翻译</span><button id="selection-close" aria-label="关闭划词悬浮窗">×</button></div><div class="selection-heading"><div id="selection-source"></div><div id="selection-context-meaning" hidden></div></div><div id="pronunciation" hidden><div id="phonetics"></div><button id="speech-play" data-accent="en-US" aria-label="朗读单词" title="朗读单词"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15 8a6 6 0 0 1 0 8M18 5a10 10 0 0 1 0 14"/></svg></button></div><div id="dictionary-details"></div><div id="sentence-analysis"></div><div id="selection-result" aria-live="polite"></div><div class="selection-actions"><button id="selection-translate">重新翻译</button><button id="selection-collect">加入生词本</button></div><div id="selection-notice" aria-live="polite"></div></aside><dialog id="preview"><button aria-label="关闭图片预览">×</button><img alt="原文图片放大预览"></dialog>
+<script src="ReaderScroll.js"></script>
+<script>
+const flows = [document.getElementById('left'), document.getElementById('right')];
+const panes = flows.map(flow => flow.parentElement);
+const preview = document.getElementById('preview');
+const popup = document.getElementById('selection-popup');
+let payload, currentKey = '', structure = '', translationKey = '', layoutKey = '', lastFocus = '';
+let swapped = false, ratio = 50, selectionID = '', selectionText = '', selectionAnchor = null, selectionTimer;
+let selectionCounter = 0;
+const make = (tag, className, text) => {
+  const element = document.createElement(tag);
+  if (className) element.className = className;
+  if (text !== undefined) element.textContent = text;
+  return element;
+};
+function post(type, extra = {}) {
+  if (selectionID) window.webkit.messageHandlers.reader.postMessage({ type, id: selectionID, ...extra });
+}
+function mark(id) {
+  document.querySelectorAll('[data-sentence]').forEach(element => element.classList.toggle('active', !!id && element.dataset.sentence === id));
+}
+function addSentence(parent, sentence, side) {
+  const element = make('span', side ? 'translated-sentence' : 'source-sentence', side ? sentence.translation : sentence.original);
+  element.dataset.sentence = sentence.id;
+  element.onmouseenter = () => mark(sentence.id);
+  element.onmouseleave = () => mark('');
+  parent.append(element, document.createTextNode(' '));
+}
+function image(block) {
+  if (!block.imageURL) return make('div', 'missing-image', block.alt || '图片不可用，请重新载入原文');
+  const img = make('img');
+  img.src = block.imageURL; img.alt = block.alt || '原文插图';
+  if (block.aspectRatio) img.style.aspectRatio = String(block.aspectRatio);
+  img.onload = layoutPDF;
+  img.onerror = () => img.replaceWith(make('div', 'missing-image', '图片加载失败，请重新载入原文'));
+  img.onclick = () => { hideSelection(); preview.querySelector('img').src = img.src; preview.showModal(); };
+  return img;
+}
+function renderBlock(block, side, sentences) {
+  const element = make('div', 'block ' + block.kind + (block.level ? ' level-' + block.level : ''));
+  element.dataset.block = block.id;
+  if (block.kind === 'image') {
+    element.className = 'block figure';
+    element.append(image(block));
+    return element;
+  }
+  if (block.kind === 'rule') { element.className = 'rule'; return element; }
+  const items = (block.sentenceIDs || []).map(id => sentences.get(id)).filter(Boolean);
+  if (block.kind === 'pdfPage' && !side) {
+    element.className = 'block pdf-page'; element.append(image(block));
+    for (const region of block.regions || []) {
+      const text = make('span', 'pdf-text', region.text);
+      text.dataset.sentence = region.sentenceID;
+      Object.assign(text.style, { left: region.x * 100 + '%', top: region.y * 100 + '%', width: region.width * 100 + '%', height: region.height * 100 + '%' });
+      text.dataset.relativeSize = region.height / (block.aspectRatio || .75);
+      text.onmouseenter = () => mark(region.sentenceID); text.onmouseleave = () => mark('');
+      element.append(text);
+    }
+    return element;
+  }
+  if (block.kind === 'pdfPage') {
+    element.classList.add('page-translations'); element.append(make('div', 'page-label', '第 ' + block.pageNumber + ' 页'));
+    for (const sentence of items) { const paragraph = make('p'); addSentence(paragraph, sentence, side); element.append(paragraph); }
+    if (!items.length) element.append(make('span', 'pending', '此页无可提取文字，原始页面仍可阅读。'));
+    return element;
+  }
+  if (block.text) { element.textContent = block.text; return element; }
+  for (const sentence of items) addSentence(element, sentence, side);
+  return element;
+}
+function updateTranslations() {
+  const sentences = new Map(payload.sentences.map(sentence => [sentence.id, sentence]));
+  for (const block of flows[1].children) {
+    const spans = [...block.querySelectorAll('.translated-sentence')];
+    const hasTranslation = spans.some(span => !!sentences.get(span.dataset.sentence)?.translation);
+    spans.forEach((span, index) => {
+      const translated = sentences.get(span.dataset.sentence)?.translation || '';
+      const desired = translated || (hasTranslation ? '…' : (index ? '' : (payload.translating ? '正在翻译…' : '尚未翻译 · 点击“翻译本章”')));
+      if (span.textContent !== desired) span.textContent = desired;
+      span.classList.toggle('pending', !translated);
+    });
+  }
+}
+function layoutPDF() {
+  for (const page of document.querySelectorAll('.pdf-page')) {
+    for (const element of page.querySelectorAll('.pdf-text')) {
+      const size = Math.max(6, page.clientWidth * Number(element.dataset.relativeSize) * .86) + 'px';
+      if (element.style.fontSize !== size) element.style.fontSize = size;
+    }
+  }
+}
+function anchors(index) {
+  const pane = panes[index], top = pane.getBoundingClientRect().top;
+  return [...flows[index].children].map(block => {
+    const rect = block.getBoundingClientRect();
+    return { id: block.dataset.block, top: rect.top - top + pane.scrollTop, height: rect.height };
+  });
+}
+function capturePosition(index) {
+  const pane = panes[index], entries = anchors(index);
+  let block = null;
+  for (const entry of entries) { if (entry.top <= pane.scrollTop) block = entry; else break; }
+  return { top: pane.scrollTop, id: block?.id, offset: block ? pane.scrollTop - block.top : 0 };
+}
+function restorePosition(index, position) {
+  const block = position.id ? anchors(index).find(item => item.id === position.id) : null;
+  panes[index].scrollTop = block ? block.top + position.offset : position.top;
+}
+function syncPane(index) {
+  if (payload?.mode !== 'bilingual') return;
+  const source = panes[index], peer = panes[1 - index];
+  const position = OneReadScroll.mapPosition(source.scrollTop, Math.max(0, source.scrollHeight - source.clientHeight), Math.max(0, peer.scrollHeight - peer.clientHeight), anchors(index), anchors(1 - index));
+  if (Math.abs(peer.scrollTop - position) > .75) peer.scrollTop = position;
+}
+const scrollLink = OneReadScroll.createController({ sync: syncPane });
+function beginUserScroll(index) { scrollLink.claim(index); hideSelection(); }
+panes.forEach((pane, index) => {
+  pane.addEventListener('wheel', event => { if (Math.abs(event.deltaY) > 0) beginUserScroll(index); }, { passive: true });
+  pane.addEventListener('touchstart', () => beginUserScroll(index), { passive: true });
+  pane.addEventListener('pointerdown', () => scrollLink.claim(index));
+  pane.addEventListener('keydown', event => { if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '].includes(event.key)) beginUserScroll(index); });
+  pane.addEventListener('scroll', () => scrollLink.changed(index), { passive: true });
+});
+window.render = next => {
+  const sameChapter = currentKey === next.id;
+  const nextStructure = JSON.stringify([next.id, next.blocks, next.sentences.map(sentence => [sentence.id, sentence.original])]);
+  const nextTranslation = JSON.stringify([next.id, next.translating, next.sentences.map(sentence => sentence.translation)]);
+  const nextLayout = JSON.stringify([next.fontSize, next.mode]);
+  const needsLayout = structure !== nextStructure || translationKey !== nextTranslation || layoutKey !== nextLayout;
+  const positions = needsLayout && sameChapter ? panes.map((_, index) => capturePosition(index)) : null;
+  if (needsLayout) scrollLink.suspend();
+  if (!sameChapter) { hideSelection(); scrollLink.reset(); scrollLink.suspend(); }
+  payload = next;
+  const classes = next.theme + ' ' + next.mode + (swapped ? ' swapped' : '');
+  if (document.body.className !== classes) document.body.className = classes;
+  const font = next.fontSize + 'px';
+  if (document.documentElement.style.getPropertyValue('--size') !== font) document.documentElement.style.setProperty('--size', font);
+  if (structure !== nextStructure) {
+    const sentences = new Map(next.sentences.map(sentence => [sentence.id, sentence]));
+    flows.forEach((flow, side) => flow.replaceChildren(...next.blocks.map(block => renderBlock(block, side, sentences))));
+    if (!sameChapter) panes.forEach(pane => pane.scrollTop = 0);
+    structure = nextStructure; currentKey = next.id;
+  }
+  if (translationKey !== nextTranslation) { updateTranslations(); translationKey = nextTranslation; }
+  if (needsLayout) {
+    layoutPDF(); layoutKey = nextLayout;
+    scrollLink.resume(() => { if (positions) positions.forEach((position, index) => restorePosition(index, position)); });
+  }
+  if (next.focusSentenceID && next.focusSentenceID !== lastFocus) {
+    const side = next.mode === 'translation' ? 1 : 0;
+    const target = [...flows[side].querySelectorAll('[data-sentence]')].find(element => element.dataset.sentence === next.focusSentenceID);
+    if (target) {
+      beginUserScroll(side);
+      panes[side].scrollTop += target.getBoundingClientRect().top - panes[side].getBoundingClientRect().top - panes[side].clientHeight / 2;
+      scrollLink.changed(side); mark(next.focusSentenceID);
+    }
+  }
+  lastFocus = next.focusSentenceID;
+  applySelectionState(next.selection);
+};
+
+function positionPopup() {
+  if (!selectionAnchor || popup.hidden) return;
+  const margin = 12, width = popup.offsetWidth, height = popup.offsetHeight;
+  const left = Math.max(margin, Math.min(window.innerWidth - width - margin, selectionAnchor.left + selectionAnchor.width / 2 - width / 2));
+  let top = selectionAnchor.bottom + 10;
+  if (top + height > window.innerHeight - margin) top = selectionAnchor.top - height - 10;
+  popup.style.left = left + 'px';
+  popup.style.top = Math.max(margin, Math.min(window.innerHeight - height - margin, top)) + 'px';
+}
+function hideSelection(notify = true) {
+  clearTimeout(selectionTimer);
+  if (notify && selectionID) post('dismiss');
+  popup.hidden = true; selectionID = ''; selectionText = ''; selectionAnchor = null;
+}
+function prepareSelectionMode(text, analyzing = false) {
+  popup.classList.toggle('sentence-mode', analyzing);
+  document.getElementById('selection-title').textContent = analyzing ? '长难句解析 · ⌘T' : '划词翻译';
+  document.getElementById('selection-collect').hidden = analyzing;
+  document.getElementById('sentence-analysis').replaceChildren();
+  return analyzing;
+}
+function renderSentenceAnalysis(analysis) {
+  const root = document.getElementById('sentence-analysis');
+  function line(parent, text, style) {
+    const node = document.createElement('div'); node.className = style; node.textContent = text; parent.appendChild(node);
+  }
+  function section(title) {
+    const node = document.createElement('section'); node.className = 'analysis-section';
+    line(node, title, 'analysis-heading'); root.appendChild(node); return node;
+  }
+  line(section('中文译文'), analysis.translation, 'analysis-translation');
+  line(section('句子主干'), analysis.backbone, 'analysis-backbone');
+  function items(title, values, emptyText) {
+    const node = section(title);
+    if (!values.length) { line(node, emptyText, 'analysis-explanation'); return; }
+    for (const item of values) {
+      const row = document.createElement('div'); row.className = 'analysis-item'; node.appendChild(row);
+      line(row, item.label, 'analysis-label');
+      if (item.text) line(row, item.text, 'analysis-fragment');
+      line(row, item.explanation, 'analysis-explanation');
+    }
+  }
+  items('句子成分', analysis.components || [], '未返回成分分析');
+  items('从句分析', analysis.clauses || [], '本句未发现从句，其他短语结构见成分分析。');
+  items('重点语法', analysis.grammar || [], '未返回语法说明');
+  line(root, 'AI 句法解析 · 结合原文理解，仅供学习参考', 'dictionary-credit');
+}
+function applySelectionState(state) {
+  if (!state || !selectionID || state.id !== selectionID) return;
+  const analyzing = prepareSelectionMode(state.text, !!state.analysisRequested);
+  document.getElementById('selection-source').textContent = state.text;
+  const word = /^[A-Za-z]+(?:['’-][A-Za-z]+)*$/.test(state.text) && state.text.length <= 64;
+  document.getElementById('pronunciation').hidden = !word;
+  const entry = state.dictionary;
+  document.getElementById('phonetics').textContent = entry ? (entry.ipaUS || '音标暂缺') : '';
+  const gloss = document.getElementById('selection-context-meaning');
+  gloss.textContent = entry && !state.loading && !state.error ? entry.contextMeaning || '' : '';
+  gloss.hidden = !gloss.textContent;
+  const details = document.getElementById('dictionary-details'); details.replaceChildren();
+  if (entry && !state.loading && !state.error) {
+    function line(text, style) { const node = document.createElement('div'); node.textContent = text; node.className = style || ''; details.appendChild(node); }
+    if (entry.lemma && entry.lemma.toLowerCase() !== state.text.toLowerCase()) line('原形 · ' + entry.lemma, 'dictionary-lemma');
+    if (entry.contextExplanation) line(entry.contextExplanation, 'dictionary-context');
+    for (const meaning of entry.meanings || []) {
+      line(meaning.partOfSpeech, 'dictionary-pos');
+      for (const definition of meaning.definitions.slice(0, 2)) line('· ' + definition);
+    }
+    if (entry.exampleEnglish) line(entry.exampleEnglish, 'dictionary-example');
+    if (entry.exampleChinese) line(entry.exampleChinese);
+    line('AI 词典释义 · 音标与词义由当前模型生成', 'dictionary-credit');
+  }
+  const analysis = state.analysis;
+  if (analysis && !state.loading && !state.error) renderSentenceAnalysis(analysis);
+  document.getElementById('selection-result').hidden = (!!entry || !!analysis) && !state.loading && !state.error;
+  document.getElementById('selection-result').textContent = state.loading ? (analyzing ? '正在翻译并解析句子结构…' : '正在翻译…') : (state.error || state.translation || '');
+  document.getElementById('selection-result').classList.toggle('error', !!state.error);
+  document.getElementById('selection-notice').textContent = state.notice || '';
+  const retry = document.getElementById('selection-translate');
+  retry.disabled = state.loading; retry.textContent = analyzing ? (state.error ? '重试解析' : '重新解析') : (state.error ? '重试翻译' : '重新翻译');
+  document.getElementById('selection-collect').disabled = state.text.length > 120 || state.loading;
+  positionPopup();
+}
+function showSelection() {
+  const selection = window.getSelection();
+  if (!selection || selection.isCollapsed || !selection.rangeCount) return;
+  const range = selection.getRangeAt(0);
+  const ancestor = range.commonAncestorContainer.nodeType === Node.ELEMENT_NODE ? range.commonAncestorContainer : range.commonAncestorContainer.parentElement;
+  if (!ancestor || !flows.some(flow => flow.contains(ancestor))) return;
+  const text = selection.toString().trim().slice(0, 12000);
+  if (!text || (text === selectionText && !popup.hidden)) return;
+  const rects = [...range.getClientRects()].filter(rect => rect.bottom > 0 && rect.top < window.innerHeight && rect.width > 0);
+  const rect = rects.at(-1);
+  if (!rect) return;
+  const context = ancestor.closest('[data-block]')?.textContent?.slice(0, 2000) || '';
+  openSelection(text, rect, context);
+}
+function openSelection(text, rect, context, analyzing = false, sentenceID = '') {
+  hideSelection(); selectionText = text; selectionID = 'selection-' + Date.now() + '-' + (++selectionCounter);
+  prepareSelectionMode(text, analyzing);
+  document.getElementById('selection-translate').textContent = analyzing ? '重新解析' : '重新翻译';
+  selectionAnchor = { left: rect.left, top: rect.top, bottom: rect.bottom, width: rect.width };
+  document.getElementById('selection-context-meaning').textContent = '';
+  document.getElementById('selection-context-meaning').hidden = true;
+  document.getElementById('dictionary-details').replaceChildren();
+  document.getElementById('phonetics').textContent = '';
+  document.getElementById('pronunciation').hidden = !/^[A-Za-z]+(?:['’-][A-Za-z]+)*$/.test(text) || text.length > 64;
+  document.getElementById('selection-result').hidden = false;
+  document.getElementById('selection-source').textContent = text;
+  document.getElementById('selection-result').textContent = analyzing ? '正在翻译并解析句子结构…' : '正在翻译…';
+  document.getElementById('selection-result').classList.remove('error');
+  document.getElementById('selection-notice').textContent = '';
+  document.getElementById('selection-translate').disabled = true;
+  document.getElementById('selection-collect').disabled = text.length > 120;
+  popup.hidden = false; positionPopup();
+  post(analyzing ? 'analyze' : 'selection', analyzing ? {sentenceID} : {text, context});
+}
+let readerPointer = null;
+document.addEventListener('pointermove', event => { readerPointer = {x: event.clientX, y: event.clientY}; });
+document.documentElement.addEventListener('pointerleave', () => { readerPointer = null; });
+window.analyzeHoveredSentence = function(x, y) {
+  if (Number.isFinite(x) && Number.isFinite(y)) readerPointer = {x, y};
+  if (!readerPointer || !payload || preview.open) return false;
+  const element = document.elementFromPoint(readerPointer.x, readerPointer.y)?.closest('[data-sentence]');
+  if (!element || !flows.some(flow => flow.contains(element))) return false;
+  const sentence = payload.sentences.find(item => item.id === element.dataset.sentence);
+  if (!sentence || !sentence.original.trim()) return false;
+  // Use the current fragment under the pointer for PDFs and wrapped sentences.
+  const rects = [...element.getClientRects()];
+  const rect = rects.find(rect => readerPointer.x >= rect.left && readerPointer.x <= rect.right && readerPointer.y >= rect.top && readerPointer.y <= rect.bottom) || element.getBoundingClientRect();
+  openSelection(sentence.original, rect, sentence.original, true, sentence.id);
+  return true;
+};
+document.addEventListener('mouseup', event => {
+  if (popup.contains(event.target)) return;
+  clearTimeout(selectionTimer); selectionTimer = setTimeout(showSelection, 180);
+});
+document.addEventListener('keyup', event => {
+  if (event.shiftKey && event.key.startsWith('Arrow')) { clearTimeout(selectionTimer); selectionTimer = setTimeout(showSelection, 180); }
+});
+document.addEventListener('pointerdown', event => { if (!popup.contains(event.target)) hideSelection(); });
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape') hideSelection();
+  if (event.metaKey && !event.altKey && !event.ctrlKey && !event.shiftKey && event.key.toLowerCase() === 't') {
+    event.preventDefault(); if (!event.repeat) window.analyzeHoveredSentence();
+  }
+});
+popup.addEventListener('pointerdown', event => event.stopPropagation());
+popup.querySelectorAll('button').forEach(button => button.addEventListener('mousedown', event => event.preventDefault()));
+document.getElementById('selection-close').onclick = () => hideSelection();
+document.getElementById('selection-translate').onclick = () => post('translate');
+document.getElementById('selection-collect').onclick = () => post('collect');
+document.querySelectorAll('[data-accent]').forEach(button => { button.onclick = () => post('speak', {accent: button.dataset.accent, slow: false}); });
+window.addEventListener('resize', () => { hideSelection(); scrollLink.suspend(); layoutPDF(); scrollLink.resume(); });
+new ResizeObserver(layoutPDF).observe(document.querySelector('.columns'));
+preview.querySelector('button').onclick = () => preview.close();
+preview.onclick = event => { if (event.target === preview) preview.close(); };
+document.querySelector('.swap').onclick = () => {
+  hideSelection(); scrollLink.suspend(); swapped = !swapped;
+  document.body.classList.toggle('swapped', swapped); ratio = 100 - ratio;
+  document.documentElement.style.setProperty('--column', ratio + '%'); scrollLink.resume(layoutPDF);
+};
+const divider = document.querySelector('.divider');
+divider.onpointerdown = event => {
+  hideSelection(); scrollLink.suspend(); divider.setPointerCapture(event.pointerId);
+  divider.onpointermove = pointer => {
+    const rect = document.querySelector('.columns').getBoundingClientRect();
+    ratio = Math.min(75, Math.max(25, (pointer.clientX - rect.left) / rect.width * 100));
+    document.documentElement.style.setProperty('--column', ratio + '%');
+  };
+  divider.onpointerup = () => { divider.onpointermove = null; scrollLink.resume(layoutPDF); };
+};
+divider.onkeydown = event => {
+  if (['ArrowLeft', 'ArrowRight'].includes(event.key)) {
+    hideSelection(); scrollLink.suspend(); ratio = Math.min(75, Math.max(25, ratio + (event.key === 'ArrowRight' ? 2 : -2)));
+    document.documentElement.style.setProperty('--column', ratio + '%'); event.preventDefault(); scrollLink.resume(layoutPDF);
+  }
+};
+</script>
+</body></html>

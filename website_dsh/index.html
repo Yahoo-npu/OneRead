@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>一读 · One Read — 从一篇外刊，看见更大的世界。</title>
+<meta name="description" content="一读 One Read，为 macOS 设计的英文阅读器。导入外刊，双语对照，一键翻译，划词学习与长难句解析，将生词同步到墨墨。七段真实操作视频，看看阅读如何自然发生。">
+<meta name="theme-color" content="#ffffff">
+<meta property="og:title" content="一读 · One Read — 从一篇外刊，看见更大的世界。">
+<meta property="og:description" content="读懂一篇外刊，积累一个新词。让原文、翻译与理解，留在同一页。">
+<meta property="og:type" content="website">
+<link rel="icon" href="assets/app-icon.png">
+<link rel="apple-touch-icon" href="assets/app-icon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#main">跳至正文</a>
+
+<!-- 阅读进度细线 -->
+<div class="reading-ribbon" aria-hidden="true"><span class="ribbon-fill" id="ribbon-fill"></span></div>
+
+<header id="site-header">
+  <nav class="wrap nav" aria-label="主导航">
+    <a class="brand" href="#main" aria-label="一读 One Read 首页">
+      <img src="assets/app-icon.png" width="32" height="32" alt="" decoding="async">
+      <span class="brand-name">一读<small>ONE READ</small></span>
+    </a>
+    <div class="nav-links" id="nav-links">
+      <a href="#demo" data-nav="demo">功能演示</a>
+      <a href="#magazines" data-nav="magazines">四刊</a>
+      <a href="#faq" data-nav="faq">常见问题</a>
+      <a href="https://github.com/Yahoo-npu/OneRead" target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
+    <div class="download-nav">
+      <button class="nav-download" id="download-toggle" type="button" aria-expanded="false" aria-controls="platform-panel" aria-haspopup="true">
+        下载 <span class="chev" aria-hidden="true">⌄</span>
+      </button>
+      <div class="platform-panel" id="platform-panel" hidden>
+        <p class="panel-title">选择平台 <span>DOWNLOAD</span></p>
+        <a class="platform-row is-ready" data-platform="macos" href="https://github.com/Yahoo-npu/OneRead/releases/latest">
+          <span class="platform-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="12" rx="2"/><path d="M1 19h22"/></svg></span>
+          <span class="platform-meta"><b>macOS</b><small>14+ · Apple Silicon</small></span>
+          <span class="platform-tag">v1.0.0 ↓</span>
+        </a>
+        <a class="platform-row is-soon" data-platform="windows" aria-disabled="true">
+          <span class="platform-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg></span>
+          <span class="platform-meta"><b>Windows</b><small>桌面版</small></span>
+          <span class="platform-tag">即将推出</span>
+        </a>
+        <a class="platform-row is-soon" data-platform="android" aria-disabled="true">
+          <span class="platform-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg></span>
+          <span class="platform-meta"><b>Android</b><small>移动版</small></span>
+          <span class="platform-tag">即将推出</span>
+        </a>
+        <p class="panel-foot">Windows 与 Android 版正在开发中</p>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<main id="main">
+
+<!-- ══════════ 封面 COVER ══════════ -->
+<section class="cover wrap" id="cover" aria-labelledby="cover-heading">
+  <div class="cover-copy">
+    <p class="eyebrow"><span class="status-dot"></span>ISSUE 01 · 双语阅读特刊 <span class="mono-note">EST. 2026</span></p>
+    <h1 id="cover-heading"><span class="h1-small">读懂一篇外刊，</span><span class="h1-big">看见更大的<br><em>世界</em><i class="h1-period">。</i></span></h1>
+    <p class="cover-typed" id="cover-typed" aria-label="Read a little. See a little more. Keep every word."><noscript>Read a little. · See a little more. · Keep every word.</noscript></p>
+    <p class="cover-intro">为 macOS 设计的英文阅读器。<br>双语对照 · 划词学习 · 长难句解析，让每一次阅读都留下积累。</p>
+    <div class="cover-actions">
+      <a class="button primary" href="https://github.com/Yahoo-npu/OneRead/releases/latest">下载 macOS 版 <span aria-hidden="true">↗</span></a>
+      <a class="text-link" href="#download">所有平台 <span aria-hidden="true">↓</span></a>
+    </div>
+    <p class="platform">macOS 14+ <i>·</i> Apple Silicon <i>·</i> v1.0.0</p>
+  </div>
+
+  <div class="cover-plate" id="cover-plate">
+    <svg class="icon-mark" viewBox="0 0 240 240" aria-hidden="true" fill="none">
+      <path d="M70 96H170" stroke-width="10" stroke-linecap="round"/>
+      <path d="M70 96V150Q70 166 84 166H156Q170 166 170 150V96" stroke-width="10" stroke-linecap="round"/>
+      <circle cx="120" cy="120" r="102" stroke-dasharray="2 9"/>
+    </svg>
+    <div class="plate-stack" aria-hidden="true"><span></span><span></span></div>
+    <figure class="plate-frame">
+      <div class="plate-inner">
+        <img src="assets/library.webp" width="2720" height="1696" alt="一读真实主界面：最近阅读、分类书架与每日一言" fetchpriority="high" decoding="async">
+        <button class="pin" style="--x:13%;--y:30%" type="button" aria-expanded="false"><span class="pin-dot" aria-hidden="true"></span><span class="pin-note"><b>最近阅读</b>打开上次停下的那一页，接着读。</span></button>
+        <button class="pin" style="--x:70%;--y:24%" type="button" aria-expanded="false"><span class="pin-dot" aria-hidden="true"></span><span class="pin-note"><b>每日一言</b>每天一句中英名言，可折叠、可拖动。</span></button>
+        <button class="pin" style="--x:26%;--y:78%" type="button" aria-expanded="false"><span class="pin-dot" aria-hidden="true"></span><span class="pin-note"><b>九宫格分类</b>你的书架，由你来编排。</span></button>
+      </div>
+      <figcaption><span>FIG. 01 — 真实主界面 · 书架与每日一言</span><span>2720 × 1696</span></figcaption>
+    </figure>
+  </div>
+
+  <div class="cover-foot">
+    <span class="foot-number">P.001</span>
+    <p>像翻一本书一样，走进你的阅读旅程。</p>
+    <a href="#demo" aria-label="向下翻阅"><span>向下翻页</span><span class="scroll-arrow" aria-hidden="true">↓</span></a>
+  </div>
+</section>
+
+<!-- ══════════ 功能演示 DEMO ══════════ -->
+<section class="chapter wrap" id="demo" data-nav="demo" data-page="01" aria-labelledby="demo-heading">
+  <div class="chapter-heading reveal">
+    <span class="chapter-watermark" aria-hidden="true">01</span>
+    <p class="eyebrow">功能演示 · THE REEL</p>
+    <h2 id="demo-heading">七个真实场景，<br><em>一段完整旅程。</em></h2>
+  </div>
+
+  <article class="demo" id="demo-magazines">
+    <header class="demo-head reveal">
+      <p class="demo-eyebrow"><span>01</span>外刊导入</p>
+      <h3>把想读的世界，放进书架。</h3>
+      <p>四种外刊，一个入口。选择刊物和期号，导入后即可开始阅读。</p>
+      <p class="demo-meta"><i aria-hidden="true"></i>实机演示 · 00:10</p>
+    </header>
+    <figure class="demo-figure">
+      <video width="2720" height="1696" muted playsinline disablepictureinpicture disableremoteplayback preload="metadata" src="assets/demos/magazines.mp4" poster="assets/demos/magazines-poster.webp" aria-label="外刊导入实机演示"></video>
+    </figure>
+  </article>
+
+  <article class="demo" id="demo-updates">
+    <header class="demo-head reveal">
+      <p class="demo-eyebrow"><span>02</span>新刊推送</p>
+      <h3>新一期到了，由你确认。</h3>
+      <p>启动时检查仓库新刊，缓存时效内不重复打扰，由你决定是否导入。</p>
+      <p class="demo-meta"><i aria-hidden="true"></i>实机演示 · 00:06</p>
+    </header>
+    <figure class="demo-figure">
+      <video width="2720" height="1696" muted playsinline disablepictureinpicture disableremoteplayback preload="metadata" src="assets/demos/updates.mp4" poster="assets/demos/updates-poster.webp" aria-label="新刊推送实机演示"></video>
+    </figure>
+  </article>
+
+  <article class="demo" id="demo-reading">
+    <header class="demo-head reveal">
+      <p class="demo-eyebrow"><span>03</span>双语对照</p>
+      <h3>两种语言，在同一页相遇。</h3>
+      <p>仅原文、对照与仅译文三种视图；联动滚动、句子悬停对应，两栏宽度与左右顺序都可以调整。</p>
+      <p class="demo-meta"><i aria-hidden="true"></i>实机演示 · 00:08</p>
+    </header>
+    <figure class="demo-figure">
+      <video width="2720" height="1696" muted playsinline disablepictureinpicture disableremoteplayback preload="metadata" src="assets/demos/reading.mp4" poster="assets/demos/reading-poster.webp" aria-label="双语对照阅读实机演示"></video>
+    </figure>
+  </article>
+
+  <article class="demo" id="demo-translation">
+    <header class="demo-head reveal">
+      <p class="demo-eyebrow"><span>04</span>一键翻译</p>
+      <h3>一章一键，全文可续。</h3>
+      <p>只翻译当前章节或整本读物；中途停止后，还能继续未完成的部分。</p>
+      <p class="demo-meta"><i aria-hidden="true"></i>实机演示 · 00:07</p>
+    </header>
+    <figure class="demo-figure">
+      <video width="2720" height="1696" muted playsinline disablepictureinpicture disableremoteplayback preload="metadata" src="assets/demos/translation.mp4" poster="assets/demos/translation-poster.webp" aria-label="一键翻译实机演示"></video>
+    </figure>
+  </article>
+
+  <article class="demo" id="demo-word">
+    <header class="demo-head reveal">
+      <p class="demo-eyebrow"><span>05</span>划词翻译</p>
+      <h3>划过，就多一个新词。</h3>
+      <p>单词原形、美式音标、词性与文中释义一应俱全，点击图标即可朗读。</p>
+      <p class="demo-meta"><i aria-hidden="true"></i>实机演示 · 00:05</p>
+    </header>
+    <figure class="demo-figure">
+      <video width="2720" height="1696" muted playsinline disablepictureinpicture disableremoteplayback preload="metadata" src="assets/demos/word.mp4" poster="assets/demos/word-poster.webp" aria-label="划词翻译实机演示"></video>
+    </figure>
+  </article>
+
+  <article class="demo" id="demo-vocabulary">
+    <header class="demo-head reveal">
+      <p class="demo-eyebrow"><span>06</span>墨墨同步</p>
+      <h3>生词，同步到云词本。</h3>
+      <p>将本地生词追加至墨墨云词本，保留云端已有词条；单向、手动、可控。</p>
+      <p class="demo-meta"><i aria-hidden="true"></i>实机演示 · 00:07</p>
+    </header>
+    <figure class="demo-figure">
+      <video width="2720" height="1696" muted playsinline disablepictureinpicture disableremoteplayback preload="metadata" src="assets/demos/vocabulary.mp4" poster="assets/demos/vocabulary-poster.webp" aria-label="墨墨云词本同步实机演示"></video>
+    </figure>
+  </article>
+
+  <article class="demo" id="demo-clauses">
+    <header class="demo-head reveal">
+      <p class="demo-eyebrow"><span>07</span>长难句解析</p>
+      <h3>再长的句子，也能一眼看穿。</h3>
+      <p>把鼠标停留在句子上，按下 <kbd>⌘T</kbd>：翻译、句子成分、从句与重点语法，一目了然。</p>
+      <p class="demo-meta"><i aria-hidden="true"></i>实机演示 · 00:15</p>
+    </header>
+    <figure class="demo-figure">
+      <video width="2720" height="1696" muted playsinline disablepictureinpicture disableremoteplayback preload="metadata" src="assets/demos/clauses.mp4" poster="assets/demos/clauses-poster.webp" aria-label="长难句解析实机演示"></video>
+    </figure>
+  </article>
+</section>
+
+<!-- ══════════ 四刊 MAGAZINES ══════════ -->
+<section class="chapter wrap" id="magazines" data-nav="magazines" data-page="02" aria-labelledby="magazines-heading">
+  <div class="chapter-heading split reveal">
+    <span class="chapter-watermark" aria-hidden="true">02</span>
+    <div>
+      <p class="eyebrow">FOUR WINDOWS, ONE WORLD</p>
+      <h2 id="magazines-heading">四扇窗，<em>世界的不同切面。</em></h2>
+    </div>
+    <div class="chapter-side">
+      <p>从时事到人文，从科技到生活。<br>选一个好奇的方向，开始今天的阅读。</p>
+    </div>
+  </div>
+
+  <div class="magazine-grid">
+    <article class="mag-card reveal" style="--accent:#9e3d47">
+      <div class="mag-flip">
+        <div class="mag-face mag-front">
+          <button class="mag-open" type="button" aria-expanded="false" aria-controls="mag-economist">
+        <span class="mag-art">
+          <span class="mag-number">01 / WORLD AFFAIRS</span>
+          <svg viewBox="0 0 200 160" aria-hidden="true"><circle cx="100" cy="80" r="62"/><ellipse cx="100" cy="80" rx="20" ry="62"/><ellipse cx="100" cy="80" rx="62" ry="20"/><path d="M38 80H162"/><path class="art-strong" d="M38 122Q76 72 162 44"/><path class="art-arrow" d="M162 44l-8 2 4 8M150 34l4-4 12 10" stroke-width="2"/><circle class="art-dot" cx="150" cy="34" r="4"/></svg>
+          <i class="page-edge" aria-hidden="true"></i>
+        </span>
+        <span class="mag-name"><b>The Economist</b><em>经济学人</em></span>
+        <span class="mag-desc">从全球政治、经济与商业出发，延伸到科技与文化。在紧凑的论述里，看懂世界如何运转。</span>
+        <span class="mag-more">翻开内页 <i aria-hidden="true">↗</i></span>
+          </button>
+        </div>
+        <div class="mag-face mag-back" id="mag-economist" inert>
+          <span class="mag-back-kicker">内页 · INSIDE</span>
+          <p class="mag-back-title">适合怎样练？</p>
+          <p class="mag-back-text">抓住论点、梳理论据，积累时事表达。</p>
+          <a class="mag-back-link" href="https://myaccount.economist.com/s/article/What-does-The-Economist-do" target="_blank" rel="noopener">了解刊物 ↗</a>
+          <button class="mag-close" type="button">返回封面</button>
+        </div>
+      </div>
+    </article>
+
+    <article class="mag-card reveal" style="--accent:#6f6c48">
+      <div class="mag-flip">
+        <div class="mag-face mag-front">
+          <button class="mag-open" type="button" aria-expanded="false" aria-controls="mag-newyorker">
+        <span class="mag-art">
+          <span class="mag-number">02 / PEOPLE &amp; STORIES</span>
+          <svg viewBox="0 0 200 160" aria-hidden="true"><path class="art-strong" d="M62 108V60q0-20 24-20h20q24 0 24 20v48"/><path d="M56 108h80M62 86h68"/><circle class="art-dot" cx="160" cy="48" r="3"/><path class="art-star" d="M160 40l1.6 3.6 3.6 1.6-3.6 1.6-1.6 3.6-1.6-3.6-3.6-1.6 3.6-1.6z"/></svg>
+          <i class="page-edge" aria-hidden="true"></i>
+        </span>
+        <span class="mag-name"><b class="ny">The New Yorker</b><em>纽约客</em></span>
+        <span class="mag-desc">深度报道、文化评论、小说与幽默相遇。跟随细腻的叙事，走近具体的人与生活。</span>
+        <span class="mag-more">翻开内页 <i aria-hidden="true">↗</i></span>
+          </button>
+        </div>
+        <div class="mag-face mag-back" id="mag-newyorker" inert>
+          <span class="mag-back-kicker">内页 · INSIDE</span>
+          <p class="mag-back-title">适合怎样练？</p>
+          <p class="mag-back-text">品味叙事节奏，理解人物、语气与语境。</p>
+          <a class="mag-back-link" href="https://www.newyorker.com/about/us" target="_blank" rel="noopener">了解刊物 ↗</a>
+          <button class="mag-close" type="button">返回封面</button>
+        </div>
+      </div>
+    </article>
+
+    <article class="mag-card reveal" style="--accent:#42637c">
+      <div class="mag-flip">
+        <div class="mag-face mag-front">
+          <button class="mag-open" type="button" aria-expanded="false" aria-controls="mag-atlantic">
+        <span class="mag-art">
+          <span class="mag-number">03 / IDEAS &amp; CULTURE</span>
+          <svg viewBox="0 0 200 160" aria-hidden="true"><path d="M24 56q18-13 36 0t36 0t36 0t36 0"/><path d="M24 84q18-13 36 0t36 0t36 0t36 0"/><path d="M24 112q18-13 36 0t36 0t36 0t36 0"/><path class="art-strong" d="M146 38l-9 20h18zM137 58h18l-2 4h-14zM133 62l12 16h-6l-10-13z"/></svg>
+          <i class="page-edge" aria-hidden="true"></i>
+        </span>
+        <span class="mag-name"><b class="atl">The Atlantic</b><em>大西洋月刊</em></span>
+        <span class="mag-desc">围绕政治、社会与文化展开深度讨论。把一个问题读深一点，也为熟悉的观点留一个问号。</span>
+        <span class="mag-more">翻开内页 <i aria-hidden="true">↗</i></span>
+          </button>
+        </div>
+        <div class="mag-face mag-back" id="mag-atlantic" inert>
+          <span class="mag-back-kicker">内页 · INSIDE</span>
+          <p class="mag-back-title">适合怎样练？</p>
+          <p class="mag-back-text">跟进长篇论述，比较观点与推理方式。</p>
+          <a class="mag-back-link" href="https://www.theatlantic.com/" target="_blank" rel="noopener">了解刊物 ↗</a>
+          <button class="mag-close" type="button">返回封面</button>
+        </div>
+      </div>
+    </article>
+
+    <article class="mag-card reveal" style="--accent:#8a6d22">
+      <div class="mag-flip">
+        <div class="mag-face mag-front">
+          <button class="mag-open" type="button" aria-expanded="false" aria-controls="mag-wired">
+        <span class="mag-art">
+          <span class="mag-number">04 / WHAT COMES NEXT</span>
+          <svg viewBox="0 0 200 160" aria-hidden="true"><rect x="34" y="36" width="132" height="88" rx="8"/><path d="M34 80h26M166 80h-26M100 36v26M100 124v-26"/><path class="art-strong" d="M60 116L76 92h20l14-22h30l12-18"/><circle class="art-dot" cx="60" cy="116" r="4"/><circle class="art-dot" cx="152" cy="52" r="4"/><path d="M46 48h8M46 56h8M146 104h8M146 112h8"/></svg>
+          <i class="page-edge" aria-hidden="true"></i>
+        </span>
+        <span class="mag-name"><b class="wired">WIRED</b><em>连线</em></span>
+        <span class="mag-desc">关注科技、科学、商业与文化的交汇。沿着新技术与新想法，看未来如何走进日常。</span>
+        <span class="mag-more">翻开内页 <i aria-hidden="true">↗</i></span>
+          </button>
+        </div>
+        <div class="mag-face mag-back" id="mag-wired" inert>
+          <span class="mag-back-kicker">内页 · INSIDE</span>
+          <p class="mag-back-title">适合怎样练？</p>
+          <p class="mag-back-text">理解科技语境，让新概念与词汇一起生长。</p>
+          <a class="mag-back-link" href="https://www.wired.com/" target="_blank" rel="noopener">了解刊物 ↗</a>
+          <button class="mag-close" type="button">返回封面</button>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <p class="chapter-footnote reveal">内置四刊导入入口 · 期号与可用资源以来源仓库为准 <a class="text-link" href="#demo-magazines">看演示 <span aria-hidden="true">↑</span></a></p>
+</section>
+
+<!-- ══════════ 尾声 READER ══════════ -->
+<section class="chapter wrap" id="readers" data-page="03" aria-labelledby="readers-heading">
+  <div class="reader-layout">
+    <div class="reader-intro reveal">
+      <span class="reader-mark" aria-hidden="true">一</span>
+      <p class="eyebrow">YOUR OWN REASON TO READ</p>
+      <h2 id="readers-heading">你为何而读，<br><em>都有一页属于你。</em></h2>
+      <p>为下一场考试，也为自己的好奇心。<br>把阅读，变成可以持续的日常。</p>
+    </div>
+
+    <ol class="reason-list">
+      <li class="reason reveal">
+        <span class="reason-num" aria-hidden="true">01</span>
+        <span class="reason-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4 2.5 8.5 12 13l9.5-4.5zM6 10.5V15c0 1.6 2.7 3 6 3s6-1.4 6-3v-4.5M21 9v5"/></svg></span>
+        <div class="reason-body">
+          <h3>为更进一步</h3>
+          <p>备考高考、四级、六级或考研，用真实语境积累词汇、拆解长难句，练习英语精读。</p>
+          <div class="reader-tags"><span>高考</span><span>CET-4</span><span>CET-6</span><span>考研</span></div>
+        </div>
+        <span class="reason-arrow" aria-hidden="true">↗</span>
+      </li>
+      <li class="reason reveal">
+        <span class="reason-num" aria-hidden="true">02</span>
+        <span class="reason-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg></span>
+        <div class="reason-body">
+          <h3>为看见更多</h3>
+          <p>想提升英语阅读水平，也想通过外刊了解外面的世界。在不同的观点里，拓宽自己的视野。</p>
+          <div class="reader-tags"><span>阅读提升</span><span>外刊爱好者</span></div>
+        </div>
+        <span class="reason-arrow" aria-hidden="true">↗</span>
+      </li>
+      <li class="reason reveal">
+        <span class="reason-num" aria-hidden="true">03</span>
+        <span class="reason-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 6c-2-1.5-5-2-8-2v14c3 0 6 .5 8 2 2-1.5 5-2 8-2V4c-3 0-6 .5-8 2zM12 6v14"/></svg></span>
+        <div class="reason-body">
+          <h3>为一本好书</h3>
+          <p>寻找一款舒适的英文阅读器，导入自己的 PDF 或 EPUB，让翻译与生词积累陪伴原版阅读。</p>
+          <div class="reader-tags"><span>英文书籍</span><span>原版阅读</span></div>
+        </div>
+        <span class="reason-arrow" aria-hidden="true">↗</span>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ══════════ 下载 DOWNLOAD ══════════ -->
+<section class="download wrap" id="download" data-page="04" aria-labelledby="download-heading">
+  <div class="download-inner reveal">
+    <svg class="icon-mark" viewBox="0 0 240 240" aria-hidden="true" fill="none">
+      <path d="M70 96H170" stroke-width="10" stroke-linecap="round"/>
+      <path d="M70 96V150Q70 166 84 166H156Q170 166 170 150V96" stroke-width="10" stroke-linecap="round"/>
+    </svg>
+    <p class="eyebrow">NEXT PAGE · 下载</p>
+    <h2 id="download-heading">下一页，<br><em>从这一页开始。</em></h2>
+    <p class="cta-en">Turn the page. Read a little. See a little more.</p>
+
+    <div class="platform-grid">
+      <article class="platform-card is-ready" data-platform="macos">
+        <span class="platform-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="12" rx="2"/><path d="M1 19h22"/></svg></span>
+        <h3>macOS</h3>
+        <p class="platform-spec">14+ · Apple Silicon</p>
+        <a class="platform-btn" data-download href="https://github.com/Yahoo-npu/OneRead/releases/latest">下载 v1.0.0 <span aria-hidden="true">↓</span></a>
+      </article>
+      <article class="platform-card is-soon" data-platform="windows">
+        <span class="platform-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg></span>
+        <h3>Windows</h3>
+        <p class="platform-spec">桌面版 · 正在开发</p>
+        <a class="platform-btn" data-download>下载 <span aria-hidden="true">↓</span></a>
+        <span class="platform-pill">即将推出</span>
+      </article>
+      <article class="platform-card is-soon" data-platform="android">
+        <span class="platform-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg></span>
+        <h3>Android</h3>
+        <p class="platform-spec">移动版 · 正在开发</p>
+        <a class="platform-btn" data-download>下载 <span aria-hidden="true">↓</span></a>
+        <span class="platform-pill">即将推出</span>
+      </article>
+    </div>
+
+    <div class="download-links">
+      <a href="https://github.com/Yahoo-npu/OneRead" target="_blank" rel="noopener">GitHub ↗</a>
+      <a href="https://github.com/Yahoo-npu/OneRead/blob/main/docs/USER_GUIDE.md" target="_blank" rel="noopener">完整使用指南 ↗</a>
+      <a href="https://github.com/Yahoo-npu/OneRead/releases" target="_blank" rel="noopener">全部版本 ↗</a>
+    </div>
+    <p class="cta-meta">macOS 14+ · Apple Silicon · v1.0.0 · 首次打开受阻？查看<a href="https://github.com/Yahoo-npu/OneRead/blob/main/docs/USER_GUIDE.md" target="_blank" rel="noopener">系统安全说明 ↗</a></p>
+    <p class="download-note">Windows 与 Android 版本正在开发，上线后将在此开放下载。</p>
+  </div>
+</section>
+
+<!-- ══════════ 常见问题 FAQ ══════════ -->
+<section class="appendix wrap" id="faq" data-nav="faq" data-page="05" aria-labelledby="faq-heading">
+  <div class="appendix-head reveal">
+    <p class="eyebrow">APPENDIX · 附录</p>
+    <h2 id="faq-heading">你可能想问的。</h2>
+    <a class="text-link" href="https://github.com/Yahoo-npu/OneRead/blob/main/docs/USER_GUIDE.md" target="_blank" rel="noopener">完整使用指南 ↗</a>
+  </div>
+  <div class="faq">
+    <details class="reveal">
+      <summary>如何开始阅读？<span aria-hidden="true">＋</span></summary>
+      <p>下载 Mac 版，将应用移入「应用程序」。导入本地 PDF / EPUB，或从「导入外刊」选择期刊。在设置中填写自己的 API Key，或配置已登录的本地 Agent，即可使用翻译与解析。保存的原文和译文可离线阅读。</p>
+    </details>
+    <details class="reveal">
+      <summary>支持哪些设备与翻译服务？<span aria-hidden="true">＋</span></summary>
+      <p>当前安装包适用于 macOS 14 及以上的 Apple Silicon Mac。支持 DeepSeek、OpenAI、Gemini、通义千问等服务及自定义 API，也可检测本地 Agent。没有内置共享 Key，费用由所选服务决定。</p>
+    </details>
+    <details class="reveal">
+      <summary>新刊提醒和墨墨同步如何工作？<span aria-hidden="true">＋</span></summary>
+      <p>应用启动时按缓存时效检查仓库新刊，由你决定是否导入；受来源仓库和网络可用性影响。在设置中配置墨墨开放 API Token 后，可将生词追加同步至云词本，分类和归档不影响同步范围。</p>
+    </details>
+    <details class="reveal">
+      <summary>数据存在哪里？首次打开受阻怎么办？<span aria-hidden="true">＋</span></summary>
+      <p>书库、图片、译文和生词保存在本地可配置目录，密钥保存在 macOS 钥匙串。翻译会向所选服务发送文字与必要上下文。当前构建尚未经 Apple 公证；核对下载来源后，可在「系统设置 → 隐私与安全性」查看系统提供的打开选项。</p>
+    </details>
+    <details class="reveal">
+      <summary>当前版本有哪些使用边界？<span aria-hidden="true">＋</span></summary>
+      <p>支持无 DRM 的可重排 EPUB；复杂排版、脚注、精细表格可能不能完整还原。扫描件 PDF 需先做 OCR。词典释义与语法解析由所选模型生成，可能有误；考试标签来自社区参考词表。全文翻译按句调用，可能产生较多请求与费用。当前没有自动应用更新。</p>
+    </details>
+  </div>
+</section>
+
+<!-- ══════════ 致谢 CREDITS ══════════ -->
+<section class="credits wrap reveal" id="credits">
+  <div class="credits-heading"><h2>感谢开源，也感谢分享。</h2><p>好的阅读体验，来自许多人的积累。</p></div>
+  <div class="credits-list">
+    <a href="https://github.com/cynicalight/reader" target="_blank" rel="noopener"><b>reader ↗</b><span>设计与交互参考</span></a>
+    <a href="https://github.com/hehonghui/awesome-english-ebooks" target="_blank" rel="noopener"><b>awesome-english-ebooks ↗</b><span>外刊目录与资源</span></a>
+    <a href="https://github.com/KyleBing/english-vocabulary" target="_blank" rel="noopener"><b>english-vocabulary ↗</b><span>考试参考词表 · BSD-3-Clause</span></a>
+    <a href="https://github.com/skywind3000/ECDICT" target="_blank" rel="noopener"><b>ECDICT ↗</b><span>IELTS 参考词表 · MIT</span></a>
+    <a href="https://www.gutenberg.org/" target="_blank" rel="noopener"><b>Project Gutenberg ↗</b><span>每日一言经典作品出处</span></a>
+    <a href="https://github.com/Yahoo-npu/OneRead/blob/main/docs/THIRD_PARTY.md" target="_blank" rel="noopener"><b>Third-party notices ↗</b><span>完整声明与许可证</span></a>
+  </div>
+  <p class="legal">上述项目未参与或背书 OneRead。演示来自本机真实操作，文章与封面版权归各权利人。AI 释义与解析可能有误；考试标签基于社区参考词表。</p>
+</section>
+</main>
+
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <a class="footer-brand" href="#cover"><img src="assets/app-icon.png" width="24" height="24" alt="" loading="lazy" decoding="async">一读 · One Read</a>
+    <span class="footer-tag">Read a little. See a little more.</span>
+    <div class="footer-links">
+      <a href="https://github.com/Yahoo-npu/OneRead" target="_blank" rel="noopener">GitHub ↗</a>
+      <a href="https://github.com/Yahoo-npu/OneRead/issues" target="_blank" rel="noopener">反馈 ↗</a>
+      <a href="https://github.com/Yahoo-npu/OneRead/blob/main/docs/THIRD_PARTY.md" target="_blank" rel="noopener">第三方说明 ↗</a>
+    </div>
+  </div>
+  <div class="footer-watermark" aria-hidden="true">One Read</div>
+</footer>
+
+<a class="page-marker" id="page-marker" href="#cover" aria-label="回到顶部">
+  <span>P.</span><b id="page-marker-num">01</b><span class="pm-total">/ 05</span><i aria-hidden="true">↑</i>
+</a>
+
+<script src="app.js"></script>
+</body>
+</html>

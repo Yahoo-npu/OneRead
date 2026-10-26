@@ -1,0 +1,79 @@
+[
+  {
+    "bytes" : 15082369,
+    "duration" : 10.466666666666667,
+    "file" : "magazines.mp4",
+    "fps" : 60,
+    "height" : 1696,
+    "id" : "magazines",
+    "processing" : "H.264 passthrough remux; original video and audio retained",
+    "source" : "外刊导入.mov",
+    "width" : 2720
+  },
+  {
+    "bytes" : 15263204,
+    "duration" : 8,
+    "file" : "reading.mp4",
+    "fps" : 60,
+    "height" : 1696,
+    "id" : "reading",
+    "processing" : "H.264 passthrough remux; original video and audio retained",
+    "source" : "双语对照阅读.mov",
+    "width" : 2720
+  },
+  {
+    "bytes" : 13411304,
+    "duration" : 7,
+    "file" : "translation.mp4",
+    "fps" : 60,
+    "height" : 1696,
+    "id" : "translation",
+    "processing" : "H.264 passthrough remux; original video and audio retained",
+    "source" : "一键翻译.mov",
+    "width" : 2720
+  },
+  {
+    "bytes" : 8706134,
+    "duration" : 5.4666666666666668,
+    "file" : "word.mp4",
+    "fps" : 60,
+    "height" : 1696,
+    "id" : "word",
+    "processing" : "H.264 passthrough remux; original video and audio retained",
+    "source" : "划词翻译.mov",
+    "width" : 2720
+  },
+  {
+    "bytes" : 28102425,
+    "duration" : 15.300000000000001,
+    "file" : "clauses.mp4",
+    "fps" : 60,
+    "height" : 1696,
+    "id" : "clauses",
+    "processing" : "H.264 passthrough remux; original video and audio retained",
+    "source" : "长难句解析.mov",
+    "width" : 2720
+  },
+  {
+    "bytes" : 7872282,
+    "duration" : 6.9000000000000004,
+    "file" : "vocabulary.mp4",
+    "fps" : 60,
+    "height" : 1710,
+    "id" : "vocabulary",
+    "processing" : "H.264 passthrough remux; original video and audio retained",
+    "source" : "墨墨云词本同步.mov",
+    "width" : 2714
+  },
+  {
+    "bytes" : 6131967,
+    "duration" : 5.9000000000000004,
+    "file" : "updates.mp4",
+    "fps" : 60,
+    "height" : 1696,
+    "id" : "updates",
+    "processing" : "H.264 passthrough remux; original video and audio retained",
+    "source" : "最新期刊推送.mov",
+    "width" : 2720
+  }
+]

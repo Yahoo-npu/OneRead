@@ -45,3 +45,13 @@ dist/
 *.tmp
 __pycache__/
 *.py[cod]
+
+# Public website assets belong to the source repository.
+!website/dist/
+!website/dist/**
+website/.DS_Store
+website/**/__pycache__/
+
+# Machine metadata and local hosting configuration
+website/**/.DS_Store
+website/.openai/

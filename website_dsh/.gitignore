@@ -2,3 +2,10 @@
 # 为避免重复提交 ~95MB 媒体文件，默认不纳入版本控制。
 # 如需连同素材一起提交，删除本文件或将 assets/ 移出忽略列表。
 assets/
+
+# Current animation demo and reader artwork required by index.html.
+!assets/
+assets/*
+!assets/native/
+!assets/native/**
+!assets/reader-sketches.png
